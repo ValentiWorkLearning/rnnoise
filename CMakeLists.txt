@@ -75,7 +75,6 @@ set(RN_NOISE_SRC
         src/vec.h
 
             src/celt_lpc.c
-            #dump_rnnoise_tables.c
             src/nnet_default.c
             src/rnn.c
             src/rnnoise_tables.c
@@ -87,13 +86,6 @@ set(RN_NOISE_SRC
             #dump_features.c
             src/nnet.c
             src/pitch.c
-            #rnnoise_data_little.c
-            # src/celt_lpc.c
-            # src/denoise.c
-            # src/kiss_fft.c
-            # src/pitch.c
-            # src/rnn.c
-            # src/rnn_data.c
         )
 
 add_library(rnnoise STATIC ${RN_NOISE_SRC})
