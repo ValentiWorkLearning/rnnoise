@@ -14,23 +14,21 @@ if(MSVC)
 endif()
 
 #Pre-Generate library resources
-# Define the URL of the file to download
 set(RNNOISE_MODEL_VERSION "0b50c45")
 set(RNNOISE_MODEL_TAR "rnnoise_data-${RNNOISE_MODEL_VERSION}.tar.gz")
 set(FILE_URL "https://media.xiph.org/rnnoise/models/${RNNOISE_MODEL_TAR}")
 set(RNNOISE_DATA_DOWNLOADS_DIR ${CMAKE_CURRENT_LIST_DIR}/downloads/)
 set(RNNOISE_DOWNLOADED_PATH ${RNNOISE_DATA_DOWNLOADS_DIR}/${RNNOISE_MODEL_TAR})
-#set(DOWNLOAD_FILE ${DOWNLOAD_DIR}/${RNNOISE_MODEL_TAR})
+
 
 
 if(NOT EXISTS "${RNNOISE_DOWNLOADED_PATH}")
     
         file(DOWNLOAD ${FILE_URL} ${RNNOISE_DOWNLOADED_PATH}
                 STATUS RNNOISE_DOWNLOAD_STATUS
-                TIMEOUT 60  # Timeout in seconds
+                TIMEOUT 60
                 SHOW_PROGRESS)
 
-        # Check if the download was successful
         if(RNNOISE_DOWNLOAD_STATUS EQUAL 0)
                 message("File downloaded successfully.")
         else()
@@ -89,43 +87,13 @@ set(RN_NOISE_SRC
         )
 
 add_library(rnnoise STATIC ${RN_NOISE_SRC})
-# Build rnnoise
+
 add_definitions(-DRNNOISE_BUILD)
-
-
-# Build DLL if needed
-# if(BUILD_SHARED_LIBS)
-#   if(WIN32)
-#     target_compile_definitions(rnnoise PRIVATE DLL_EXPORT)
-#   else()
-#     include(CheckCCompilerFlag)
-#     check_c_compiler_flag(-fvisibility=hidden COMPILER_HAS_HIDDEN_VISIBILITY)
-#     if(COMPILER_HAS_HIDDEN_VISIBILITY)
-#       set_target_properties(rnnoise PROPERTIES C_VISIBILITY_PRESET hidden)
-#     endif()
-#   endif()
-# endif()
-
-include(GNUInstallDirs)
 
 # Include dirs
 target_include_directories(rnnoise PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
         $<INSTALL_INTERFACE:include>
         PRIVATE src)
-
-# install(TARGETS rnnoise EXPORT rnnoise_target
-#     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-#     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-# )
-
-# install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/
-#     DESTINATION "include")
-
-# install(EXPORT rnnoise_target
-#     FILE rnnoiseConfig.cmake
-#     DESTINATION lib/cmake/rnnoise
-# )
-
 
 add_subdirectory(examples)
