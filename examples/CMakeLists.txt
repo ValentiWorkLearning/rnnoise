@@ -17,3 +17,4 @@ target_link_libraries(
     fmt::fmt
     spdlog::spdlog
 )
+target_include_directories(rnnoise_libsoundfile PRIVATE ${CMAKE_CURRENT_LIST_DIR})
