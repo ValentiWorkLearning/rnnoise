@@ -116,7 +116,7 @@ int main(int argc, char** argv){
     catch(...){
         std::cerr << "Failed to obtain one of the required CMD args. Check help message below and verify passed options:" << std::endl;
         fmt::print(options.help());
-        exit(0);
+        exit(-1);
     }
 
     LazyFileWriter vad_file_probe(output_vad_probe.value());
