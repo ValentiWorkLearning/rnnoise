@@ -2,38 +2,32 @@
 #include <filesystem>
 #include <fstream>
 #include <iostream>
-#include <spdlog/spdlog.h>
 
 class LazyFileWriter {
 private:
     std::filesystem::path m_filepath;
-    std::fstream fileStream;
-    bool m_is_open;
+    std::fstream m_file_stream;
     void openFileIfNeeded() {
-        if (!m_is_open) {
-            fileStream.open(m_filepath, std::ios::out | std::ios::app);
-            if (!fileStream.is_open()) {
-                spdlog::error("Failed to open file:{}",m_filepath.c_str());
-                return;
+        if (!m_file_stream.is_open()) {
+            m_file_stream.open(m_filepath, std::ios::out | std::ios::app);
+            if (!m_file_stream.is_open()) {
+                throw std::runtime_error("Failed to open the lazy file writer");
             }
-            m_is_open = true;
         }
     }
 
 public:
-    LazyFileWriter(const std::filesystem::path& filepath) : m_filepath{filepath}, m_is_open{false} {}
+    LazyFileWriter(const std::filesystem::path& filepath) : m_filepath{filepath}{}
 
     ~LazyFileWriter() {
-        if (m_is_open) {
-            fileStream.close();
+        if (m_file_stream.is_open()) {
+            m_file_stream.close();
         }
     }
 
     template<typename TypeToWrite>
     void write(TypeToWrite&& data) {
         openFileIfNeeded();
-        if (m_is_open) {
-            fileStream << data << std::endl;
-        }
+        m_file_stream << data << std::endl;
     }
 };
