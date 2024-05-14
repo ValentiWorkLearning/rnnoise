@@ -96,7 +96,8 @@ int main(int argc, char** argv){
 
 
     cxxopts::Options options("rnnoise_libsoundfile denoiser", "Simple runner of rnnoise over WAVe files with 48K samplerate");
-    const auto DEFAULT_VAD_PROBE_PATH {(std::filesystem::current_path()/DEFAULT_VAD_PROBE_FILENAME).generic_string()}
+    const auto DEFAULT_VAD_PROBE_PATH {(std::filesystem::current_path()/DEFAULT_VAD_PROBE_FILENAME).generic_string()};
+
     options.add_options()
     ("input", "Input file to process",cxxopts::value<std::filesystem::path>())
     ("output", "Output file", cxxopts::value<std::filesystem::path>())
