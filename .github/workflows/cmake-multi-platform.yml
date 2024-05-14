@@ -68,15 +68,15 @@ jobs:
       run: |
         echo "build-output-dir=${{ github.workspace }}/build" >> "$GITHUB_OUTPUT"
 
-    - name: Install conan dependencies
+    - name: Detect conan profile
       run: |
         conan profile detect --force
-        conan install ${{ github.workspace }}/conanfile.txt --build=missing --settings=build_type=Release
 
     - name: Configure CMake
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
       # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
-      run: >
+      run: |
+        conan install ${{ github.workspace }}/conanfile.txt --build=missing --settings=build_type=Release
         cmake -B ${{ steps.strings.outputs.build-output-dir }}
         -S ${{ github.workspace }}
         --preset=${{ matrix.conan_profile }}
