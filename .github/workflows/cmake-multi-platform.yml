@@ -26,23 +26,30 @@ jobs:
         os: [ubuntu-latest, windows-latest]
         build_type: [Release]
         c_compiler: [gcc, clang, cl]
+        conan_profile: [conan-default, conan-release]
         include:
           - os: windows-latest
             c_compiler: cl
             cpp_compiler: cl
+            conan_profile: conan-default
           - os: ubuntu-latest
             c_compiler: gcc
             cpp_compiler: g++
+            conan_profile: conan-release
           - os: ubuntu-latest
             c_compiler: clang
             cpp_compiler: clang++
+            conan_profile: conan-release
         exclude:
           - os: windows-latest
             c_compiler: gcc
+            conan_profile: conan-release
           - os: windows-latest
             c_compiler: clang
+            conan_profile: conan-release
           - os: ubuntu-latest
             c_compiler: cl
+            conan_profile: conan-default
 
     steps:
     - uses: actions/checkout@v4
@@ -72,7 +79,7 @@ jobs:
         cmake -B ${{ steps.strings.outputs.build-output-dir }}
         -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
         -S ${{ github.workspace }}
-        --preset=conan-default
+        --preset=${{ matrix.conan_profile }}
 
     - name: Build
       # Build your program with the given configuration. Note that --config is needed because the default Windows generator is a multi-config generator (Visual Studio generator).

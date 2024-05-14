@@ -13,7 +13,7 @@ find_package(spdlog REQUIRED)
 add_executable(rnnoise_libsoundfile rnnoise_libsndfile.cpp)
 
 if(WIN32)
-    target_compile_definitions(rnnoise_libsoundfile WINDOWS_SPECIFIC_MACRO)
+    target_compile_definitions(rnnoise_libsoundfile PRIVATE WINDOWS_SPECIFIC_MACRO)
 endif(WIN32)
 
 target_link_libraries(
