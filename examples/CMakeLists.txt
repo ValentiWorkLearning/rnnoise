@@ -12,9 +12,10 @@ find_package(spdlog REQUIRED)
 
 add_executable(rnnoise_libsoundfile rnnoise_libsndfile.cpp)
 
-if(WIN32)
+if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
+    message(WARNING "Compiling RNNOISE for Windows...")
     target_compile_definitions(rnnoise_libsoundfile PRIVATE WINDOWS_SPECIFIC_MACRO)
-endif(WIN32)
+endif()
 
 target_link_libraries(
     rnnoise_libsoundfile
