@@ -83,7 +83,7 @@ static void process_audio_recording(
         denormalize_from_rnnoise_expected_level(samples_buffer);
         output_audio_file_handle.write(samples_buffer.data(),samples_buffer.size());
     }
-    spdlog::info("Processing done. WAVE file can be found at: {}", output_file.c_str());
+    spdlog::info("Processing done. WAVE file can be found at: {}", output_file.generic_string());
 }
 
 #ifdef WINDOWS_SPECIFIC_MACRO
