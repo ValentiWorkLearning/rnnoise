@@ -59,7 +59,7 @@ static void process_audio_recording(
 ){
     SndfileHandle input_audio_file_handle{SndfileHandle(input_file.c_str())};
 
-    spdlog::info("Opened input audio file:{}", input_file.c_str());
+    spdlog::info("Opened input audio file:{}", input_file.generic_string());
     spdlog::info("Number of channels:{}", input_audio_file_handle.channels());
     spdlog::info("Samplerate:{}", input_audio_file_handle.samplerate());
 
