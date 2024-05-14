@@ -62,7 +62,7 @@ jobs:
 
     - name: Install conan dependencies
       run: |
-        conan profile detect --force
+        conan profile detect --force --name ci-build-profile
         conan install ${{ github.workspace }}/conanfile.txt --build=missing --settings=build_type=Release
 
     - name: Configure CMake
@@ -71,7 +71,7 @@ jobs:
       run: >
         cmake -B ${{ steps.strings.outputs.build-output-dir }}
         -S ${{ github.workspace }}
-        --preset=conan-release
+        --preset=ci-build-profile
 
     - name: Build
       # Build your program with the given configuration. Note that --config is needed because the default Windows generator is a multi-config generator (Visual Studio generator).
