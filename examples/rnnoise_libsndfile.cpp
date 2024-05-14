@@ -93,11 +93,14 @@ static const std::string DEFAULT_VAD_PROBE_FILENAME = "vad_prob.txt";
 #endif
 
 int main(int argc, char** argv){
+
+
     cxxopts::Options options("rnnoise_libsoundfile denoiser", "Simple runner of rnnoise over WAVe files with 48K samplerate");
+    const auto DEFAULT_VAD_PROBE_PATH {(std::filesystem::current_path()/DEFAULT_VAD_PROBE_FILENAME).generic_string()}
     options.add_options()
     ("input", "Input file to process",cxxopts::value<std::filesystem::path>())
     ("output", "Output file", cxxopts::value<std::filesystem::path>())
-    ("vad_probe", "Path to store output VAD prob data", cxxopts::value<std::filesystem::path>()->default_value(std::filesystem::current_path()/DEFAULT_VAD_PROBE_FILENAME))
+    ("vad_probe", "Path to store output VAD prob data", cxxopts::value<std::filesystem::path>()->default_value(DEFAULT_VAD_PROBE_PATH))
     ("help", "Print usage");
 
     auto result = options.parse(argc, argv);
