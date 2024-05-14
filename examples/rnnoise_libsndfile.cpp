@@ -86,12 +86,18 @@ static void process_audio_recording(
     spdlog::info("Processing done. WAVE file can be found at: {}", output_file.c_str());
 }
 
+#ifdef WINDOWS_SPECIFIC_MACRO
+static const std::wstring DEFAULT_VAD_PROBE_FILENAME = L"vad_prob.txt";
+#else
+static const std::string DEFAULT_VAD_PROBE_FILENAME = "vad_prob.txt";
+#endif
+
 int main(int argc, char** argv){
     cxxopts::Options options("rnnoise_libsoundfile denoiser", "Simple runner of rnnoise over WAVe files with 48K samplerate");
     options.add_options()
     ("input", "Input file to process",cxxopts::value<std::filesystem::path>())
     ("output", "Output file", cxxopts::value<std::filesystem::path>())
-    ("vad_probe", "Path to store output VAD prob data", cxxopts::value<std::filesystem::path>()->default_value(std::filesystem::current_path()/"vad_prob.txt"))
+    ("vad_probe", "Path to store output VAD prob data", cxxopts::value<std::filesystem::path>()->default_value(std::filesystem::current_path()/DEFAULT_VAD_PROBE_FILENAME))
     ("help", "Print usage");
 
     auto result = options.parse(argc, argv);

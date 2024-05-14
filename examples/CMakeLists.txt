@@ -9,7 +9,13 @@ find_package(cxxopts REQUIRED)
 find_package(fmt REQUIRED)
 find_package(spdlog REQUIRED)
 
+
 add_executable(rnnoise_libsoundfile rnnoise_libsndfile.cpp)
+
+if(WIN32)
+    target_compile_definitions(rnnoise_libsoundfile WINDOWS_SPECIFIC_MACRO)
+endif(WIN32)
+
 target_link_libraries(
     rnnoise_libsoundfile
     PRIVATE
