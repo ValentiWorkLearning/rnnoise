@@ -43,9 +43,9 @@ jobs:
         exclude:
           - os: windows-latest
             c_compiler: gcc
-            conan_profile: conan-release
           - os: windows-latest
             c_compiler: clang
+          - os: windows-latest
             conan_profile: conan-release
           - os: ubuntu-latest
             c_compiler: cl
