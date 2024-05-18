@@ -72,13 +72,6 @@ jobs:
       run: |
         conan profile detect --force
         conan install ${{ github.workspace }}/conanfile.txt --build=missing --settings=build_type=Release
-        echo "Github workspace LS"
-        ls -la ${{ github.workspace }}
-        echo "Github build directory LS"
-        ls -la ${{ steps.strings.outputs.build-output-dir }}
-
-        echo "Github build RELEASE directory LS"
-        ls -la ${{ steps.strings.outputs.build-output-dir }}/Release
 
     - name: Configure CMake under Linux OS
       if: matrix.os == 'ubuntu-latest'
