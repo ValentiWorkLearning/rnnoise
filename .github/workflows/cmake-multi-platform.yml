@@ -72,6 +72,10 @@ jobs:
       run: |
         conan profile detect --force
         conan install ${{ github.workspace }}/conanfile.txt --build=missing --settings=build_type=Release
+        echo "Github workspace LS"
+        ls -la ${{ github.workspace }}
+        echo "Github build directory LS"
+        ls -la ${{ steps.strings.outputs.build-output-dir }}
 
     - name: Configure CMake
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
