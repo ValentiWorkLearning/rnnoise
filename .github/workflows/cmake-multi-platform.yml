@@ -80,7 +80,7 @@ jobs:
         echo "Github build RELEASE directory LS"
         ls -la ${{ steps.strings.outputs.build-output-dir }}/Release
 
-    - name: Configure CMake
+    # - name: Configure CMake
     - uses: knicknic/os-specific-run@v1
       with:
         linux: >
