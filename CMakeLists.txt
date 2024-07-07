@@ -115,6 +115,9 @@ target_include_directories(rnnoise_amalgamated PUBLIC
 if(NOT RNNOISE_BAREMETAL)
         target_link_libraries(rnnoise PUBLIC mimalloc-static)
         target_compile_definitions(rnnoise PUBLIC USE_MIMALLOC_ALLOCATOR)
+
+        target_link_libraries(rnnoise_amalgamated PUBLIC mimalloc-static)
+        target_compile_definitions(rnnoise_amalgamated PUBLIC USE_MIMALLOC_ALLOCATOR RTCD_ARCH=c)
 endif()
 
 if (UNIX)

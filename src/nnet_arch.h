@@ -27,7 +27,6 @@
 
 #ifndef NNET_ARCH_H
 #define NNET_ARCH_H
-
 #include "vec.h"
 #include "arch.h"
 #include "nnet.h"
