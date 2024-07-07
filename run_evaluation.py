@@ -8,6 +8,22 @@ import tempfile
 import soundfile as sf
 import librosa
 
+
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.io import wavfile
+from scipy.signal import stft
+
+
+def plot_spectrogram(file_path:pathlib.Path, ax, title:str):
+    sample_rate, samples = wavfile.read(file_path)
+    frequencies, times, Zxx = stft(samples, sample_rate)
+    ax.pcolormesh(times, frequencies, 10 * np.log10(np.abs(Zxx)**2), shading='gouraud')
+    ax.set_ylabel('Frequency [Hz]')
+    ax.set_xlabel('Time [sec]')
+    ax.set_title(title)
+    ax.set_ylim(0, sample_rate / 2)
+
 def samplerate_preprocess(input_file:pathlib.Path, desired_samplerate:int)->pathlib.Path:
     data, input_sampleraete = librosa.load(input_file, sr=None)
     
@@ -63,6 +79,17 @@ def main():
                 execution_cmd.append(f"--output={result_path}")
                 result = subprocess.run(execution_cmd, check=True, capture_output=True, cwd=output_path)
 
+                
+                fig, axs = plt.subplots(2, 1, figsize=(10, 10))
+    
+                plot_spectrogram(input_file_path, axs[0], 'Spectrogram of ' + pathlib.Path(input_file_path).stem)
+                plot_spectrogram(result_path, axs[1], 'Spectrogram of ' + pathlib.Path(result_path).stem)
+                plt.tight_layout()
+                
+                output_path_picture = os.path.join(output_path, f'{pathlib.Path(input_file_path).stem}_spectrogram.png')
+                plt.savefig(output_path_picture)
+                plt.close(fig)
+ 
             except subprocess.CalledProcessError as e:
                 print(f"Error processing {file_path}")
                 print(e.stderr.decode())
