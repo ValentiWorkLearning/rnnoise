@@ -65,7 +65,7 @@ jobs:
       run: pip install conan
 
     - name: Amalgamate rnnoise
-      run: python3 header_only/amalgamate_me.py
+      run: python3 header_only/amalgamate_me.py --heady-source=${{ github.workspace }}/amalgamation/Heady --rnnoise-source=${{ github.workspace }}
 
     - name: Set reusable strings
       # Turn repeated input strings (such as the build output directory) into step outputs. These step outputs can be used throughout the workflow file.
