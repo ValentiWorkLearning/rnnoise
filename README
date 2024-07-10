@@ -123,3 +123,10 @@ at run time since the little model has the same size as the regular one
 ```shell
 cmake -G"Unix Makefiles" -DCMAKE_BUILD_TYPE="Release" DCMAKE_TOOLCHAIN_FILE="${PWD}/cmake/vitis_toolchain.cmake" -S="$PWD}" -B="${PWD}/build" -DRNNOISE_COMPILE_DEMO=OFF DRNNOISE_BAREMETAL=ON
 ```
+
+
+## Amalgamation of the sources
+The library fork supports amalgamation of the sources for using them as a standalone package. For this purpouse simply execute from the root of te repository the following:
+```shell
+python3 header_only/amalgamate_me.py --heady-source=${PWD}/amalgamation/Heady --rnnoise-source=${PWD}
+```

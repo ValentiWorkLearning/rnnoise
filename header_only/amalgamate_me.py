@@ -6,11 +6,12 @@ import os
 import argparse
 from dataclasses import dataclass
 
+
 @dataclass
 class HeadyPackage:
-    source_directory:pathlib.Path
+    source_directory: pathlib.Path
 
-    def amalgamate_sources(self, rnnoise_sources_path:pathlib.Path):
+    def amalgamate_sources(self, rnnoise_sources_path: pathlib.Path):
         self._build_if_necessary()
 
         command = [
@@ -32,7 +33,7 @@ class HeadyPackage:
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
                 text=True,
-                cwd=rnnoise_sources_path
+                cwd=rnnoise_sources_path,
             )
             print("Command executed successfully.")
             print("Output:\n", result.stdout)
@@ -40,15 +41,15 @@ class HeadyPackage:
             print("Error occurred while executing the command.")
             print("Error message:\n", e.stderr)
 
-
     def _build_if_necessary(self):
-        self.build_directory = pathlib.Path(self.source_directory,"build")
+        self.build_directory = pathlib.Path(self.source_directory, "build")
         cmake_configure = [
             "cmake",
             "-G",
             "Unix Makefiles",
             f"-S={self.source_directory}",
             f"-B={self.build_directory}",
+            "-DCMAKE_BUILD_TYPE=Release",
         ]
         subprocess.run(
             cmake_configure,
@@ -74,15 +75,24 @@ class HeadyPackage:
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Rnnoise amalgamation tool based on Heady package")
-    
-    parser.add_argument("--heady-source", type=pathlib.Path, help="Source directory of Heady package")
-    parser.add_argument("--rnnoise-source", type=pathlib.Path, help="Source directory with rnnoise sources")
-    
+    parser = argparse.ArgumentParser(
+        description="Rnnoise amalgamation tool based on Heady package"
+    )
+
+    parser.add_argument(
+        "--heady-source", type=pathlib.Path, help="Source directory of Heady package"
+    )
+    parser.add_argument(
+        "--rnnoise-source",
+        type=pathlib.Path,
+        help="Source directory with rnnoise sources",
+    )
+
     args = parser.parse_args()
-    
+
     heady_amalgamation_tool = HeadyPackage(source_directory=args.heady_source)
     heady_amalgamation_tool.amalgamate_sources(args.rnnoise_source)
+
 
 if __name__ == "__main__":
     main()
