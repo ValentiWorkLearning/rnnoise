@@ -30,7 +30,14 @@
 #include "config.h"
 #endif
 
-#include <stdlib.h>
+#ifdef USE_MIMALLOC_ALLOCATOR
+   #include <mimalloc.h>
+   #include <mimalloc-override.h>
+   #include <stdlib.h>
+#else
+   #include <stdlib.h>
+#endif
+
 #include <string.h>
 #include <stdio.h>
 #include "kiss_fft.h"

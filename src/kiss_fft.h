@@ -29,11 +29,16 @@
 #ifndef KISS_FFT_H
 #define KISS_FFT_H
 
-#include <stdlib.h>
+#ifdef USE_MIMALLOC_ALLOCATOR
+   #include <mimalloc.h>
+   #include <mimalloc-override.h>
+   #include <stdlib.h>
+#else
+   #include <stdlib.h>
+#endif
+
 #include <math.h>
 #include "arch.h"
-
-#include <stdlib.h>
 
 #ifdef USE_MIMALLOC_ALLOCATOR
 #include <mimalloc.h>
