@@ -6,7 +6,18 @@ option(RNNOISE_COMPILE_DEMO ON)
 option(RNNOISE_BAREMETAL OFF)
 
 if(NOT RNNOISE_BAREMETAL)
-        find_package(mimalloc REQUIRED)
+        # FetchContent module
+include(FetchContent)
+
+# Fetch mimalloc library
+FetchContent_Declare(
+  mimalloc
+  GIT_REPOSITORY https://github.com/microsoft/mimalloc.git
+  GIT_TAG        DEV  # Use the version you want
+)
+
+# Make mimalloc available
+FetchContent_MakeAvailable(mimalloc)
 endif()
 
 if ("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
