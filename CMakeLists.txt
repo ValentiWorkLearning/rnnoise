@@ -13,7 +13,7 @@ include(FetchContent)
 FetchContent_Declare(
   mimalloc
   GIT_REPOSITORY https://github.com/microsoft/mimalloc.git
-  GIT_TAG        DEV  # Use the version you want
+  GIT_TAG        dev  # Use the version you want
 )
 
 # Make mimalloc available
