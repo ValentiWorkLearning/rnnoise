@@ -7,7 +7,7 @@ target_link_libraries(rnnoise_demo PRIVATE rnnoise)
 find_package(SndFile REQUIRED)
 find_package(cxxopts REQUIRED)
 find_package(fmt REQUIRED)
-find_package(mimalloc REQUIRED)
+#find_package(mimalloc REQUIRED)
 
 add_executable(rnnoise_libsoundfile
     rnnoise_libsndfile.cpp
@@ -27,6 +27,6 @@ target_link_libraries(
     SndFile::sndfile
     cxxopts::cxxopts
     fmt::fmt
-    mimalloc-static
+    #mimalloc-static
 )
 target_include_directories(rnnoise_libsoundfile PRIVATE ${CMAKE_CURRENT_LIST_DIR})
