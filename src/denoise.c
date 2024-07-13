@@ -55,6 +55,8 @@
 #include <mimalloc-override.h>  
 #endif
 
+#include <stdbool.h>
+
 #define SQUARE(x) ((x)*(x))
 
 
@@ -455,4 +457,16 @@ float rnnoise_process_frame(DenoiseState *st, float *out, const float *in) {
 void rnnoise_set_xcorr_kernel_cb(DenoiseState *st, xcorr_kernel_cb xcorr_callback)
 {
   st->xcorr_callback = xcorr_callback;
+}
+
+
+float rnnoise_process_frame_standalone(float *out, const float *in)
+{
+  static bool is_initialized = false;
+  static DenoiseState* denoise_state = NULL;
+  if(!is_initialized){
+    denoise_state = rnnoise_create(NULL);
+    is_initialized = true;
+  }
+  return rnnoise_process_frame(denoise_state,out,in);
 }

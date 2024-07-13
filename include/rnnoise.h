@@ -93,6 +93,10 @@ RNNOISE_EXPORT float rnnoise_process_frame(DenoiseState *st, float *out, const f
 typedef void(*xcorr_kernel_cb)(const float * x, const float * y, float sum[4], int len);
 RNNOISE_EXPORT void rnnoise_set_xcorr_kernel_cb(DenoiseState *st, xcorr_kernel_cb xcorr_callback);
 
+/**
+ * Standalone function which embeds rnnoise processing
+ */
+RNNOISE_EXPORT float rnnoise_process_frame_standalone(float *out, const float *in);
 
 #ifdef __cplusplus
 }
