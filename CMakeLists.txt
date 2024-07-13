@@ -62,15 +62,15 @@ if(NOT EXISTS "${CMAKE_CURRENT_LIST_DIR}/src/rnnoise_data.c")
         file(COPY ${RNNOISE_MODEL_UNPACKED_SOURCE_DIR}/rnnoise_data.h DESTINATION ${RNNOIDE_MODEL_FILES_DESTINATION})
 endif()
 
-set(PYTHON_SCRIPT_ARGS "--heady-source=${CMAKE_CURRENT_LIST_DIR}/amalgamation/Heady" "--rnnoise-source=${CMAKE_CURRENT_LIST_DIR}")
-message(INFO "Processing with sources amalgamation")
-execute_process(
-    COMMAND ${CMAKE_COMMAND} -E env python3 ${CMAKE_CURRENT_LIST_DIR}/header_only/amalgamate_me.py ${PYTHON_SCRIPT_ARGS}
-        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-        RESULT_VARIABLE result
-        OUTPUT_VARIABLE output
-        ERROR_VARIABLE error
-)
+# set(PYTHON_SCRIPT_ARGS "--heady-source=${CMAKE_CURRENT_LIST_DIR}/amalgamation/Heady" "--rnnoise-source=${CMAKE_CURRENT_LIST_DIR}")
+# message(INFO "Processing with sources amalgamation")
+# execute_process(
+#     COMMAND ${CMAKE_COMMAND} -E env python3 ${CMAKE_CURRENT_LIST_DIR}/header_only/amalgamate_me.py ${PYTHON_SCRIPT_ARGS}
+#         WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+#         RESULT_VARIABLE result
+#         OUTPUT_VARIABLE output
+#         ERROR_VARIABLE error
+# )
 
 # Get source files
 
