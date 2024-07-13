@@ -7,7 +7,7 @@ target_link_libraries(rnnoise_demo PRIVATE rnnoise)
 find_package(SndFile REQUIRED)
 find_package(cxxopts REQUIRED)
 find_package(fmt REQUIRED)
-#find_package(mimalloc REQUIRED)
+find_package(mimalloc REQUIRED)
 
 add_executable(rnnoise_libsoundfile
     rnnoise_libsndfile.cpp

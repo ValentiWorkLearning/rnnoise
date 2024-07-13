@@ -6,18 +6,7 @@ option(RNNOISE_COMPILE_DEMO ON)
 option(RNNOISE_BAREMETAL OFF)
 
 if(NOT RNNOISE_BAREMETAL)
-        # FetchContent module
-include(FetchContent)
-
-# Fetch mimalloc library
-FetchContent_Declare(
-  mimalloc
-  GIT_REPOSITORY https://github.com/microsoft/mimalloc.git
-  GIT_TAG        dev  # Use the version you want
-)
-
-# Make mimalloc available
-FetchContent_MakeAvailable(mimalloc)
+        find_package(mimalloc REQUIRED)
 endif()
 
 if ("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
@@ -74,7 +63,7 @@ if(NOT EXISTS "${CMAKE_CURRENT_LIST_DIR}/src/rnnoise_data.c")
 endif()
 
 set(PYTHON_SCRIPT_ARGS "--heady-source=${CMAKE_CURRENT_LIST_DIR}/amalgamation/Heady" "--rnnoise-source=${CMAKE_CURRENT_LIST_DIR}")
-message("Processing with sources amalgamation")
+message(INFO "Processing with sources amalgamation")
 execute_process(
     COMMAND ${CMAKE_COMMAND} -E env python3 ${CMAKE_CURRENT_LIST_DIR}/header_only/amalgamate_me.py ${PYTHON_SCRIPT_ARGS}
         WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
@@ -138,7 +127,7 @@ if(NOT RNNOISE_BAREMETAL)
         target_compile_definitions(rnnoise PUBLIC USE_MIMALLOC_ALLOCATOR)
 
         target_link_libraries(rnnoise_amalgamated PUBLIC mimalloc-static)
-        target_compile_definitions(rnnoise_amalgamated PUBLIC USE_MIMALLOC_ALLOCATOR RTCD_ARCH=c)
+        target_compile_definitions(rnnoise_amalgamated PUBLIC RTCD_ARCH=c)
 endif()
 
 if (UNIX)
