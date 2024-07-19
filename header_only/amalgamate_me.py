@@ -2,27 +2,26 @@
 
 import pathlib
 import subprocess
-import os
 import argparse
 from dataclasses import dataclass
 
 import platform
-import sys
 
 
 def get_platform_architecture():
     architecture = platform.machine()
-    if architecture in ['x86_64', 'AMD64']:
-        return 'x86_64'
-    elif architecture in ['aarch64', 'arm64']:
-        return 'ARM64'
-    elif architecture in ['i386', 'i686']:
-        return 'x86'
-    elif architecture.startswith('arm'):
-        return 'ARM'
+    if architecture in ["x86_64", "AMD64"]:
+        return "x86_64"
+    elif architecture in ["aarch64", "arm64"]:
+        return "ARM64"
+    elif architecture in ["i386", "i686"]:
+        return "x86"
+    elif architecture.startswith("arm"):
+        return "ARM"
     else:
-        return 'Unknown'
-    
+        return "Unknown"
+
+
 @dataclass
 class HeadyPackage:
     source_directory: pathlib.Path
@@ -31,10 +30,10 @@ class HeadyPackage:
         self._build_if_necessary()
         current_arch = get_platform_architecture()
         ignore_list_mapping = {
-            "x86" : "config.h compile.sh rnn_train.py write_weights.c rnnoise_data.c vec_neon.h",
-            "x86_64" : "config.h compile.sh rnn_train.py write_weights.c rnnoise_data.c vec_neon.h",
-            "ARM64"  : "config.h compile.sh rnn_train.py write_weights.c rnnoise_data.c vec_avx.h",
-            "ARM"  : "config.h compile.sh rnn_train.py write_weights.c rnnoise_data.c vec_avx.h",
+            "x86": "config.h compile.sh rnn_train.py write_weights.c rnnoise_data.c vec_neon.h",
+            "x86_64": "config.h compile.sh rnn_train.py write_weights.c rnnoise_data.c vec_neon.h",
+            "ARM64": "config.h compile.sh rnn_train.py write_weights.c rnnoise_data.c vec_avx.h",
+            "ARM": "config.h compile.sh rnn_train.py write_weights.c rnnoise_data.c vec_avx.h",
         }
         command = [
             f"{pathlib.Path(self.build_directory,'Heady')}",
