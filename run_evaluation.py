@@ -7,7 +7,8 @@ import tempfile
 
 import soundfile as sf
 import librosa
-
+import librosa.display
+import shutil
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -16,7 +17,6 @@ from scipy.signal import wiener
 
 sys.path.append(os.path.join(os.getcwd(), "pyagc/agc"))
 
-import librosa.display
 
 from pyagc.agc import tf_agc
 
@@ -24,19 +24,19 @@ from pyagc.agc import tf_agc
 def plot_spectrogram(file_path: pathlib.Path, corresponding_axes,figure, axis_title: str):
     
     y, sr = librosa.load(file_path,sr=None)
-    D = librosa.stft(y)
+    D = librosa.stft(y,hop_length=256, n_fft=4096)
 
     S_db = librosa.amplitude_to_db(np.abs(D), ref=np.max)
-    spectrogram = librosa.display.specshow(S_db, sr=sr, x_axis='time', y_axis='log',ax=corresponding_axes)
+    spectrogram = librosa.display.specshow(S_db, sr=sr, hop_length=256,x_axis='time', y_axis='log',ax=corresponding_axes)
     
     corresponding_axes.set(title=axis_title)
     figure.colorbar(spectrogram, ax=corresponding_axes, format="%+2.f dB")
 
 
 def weiner_filter_denoising(audio_file_path:pathlib.Path, output_dir:pathlib.Path):
-    y, sr = librosa.load(audio_file_path,sr=None)
+    audio_data, sr = librosa.load(audio_file_path,sr=None)
 
-    filtered_audio = wiener(y)
+    filtered_audio = wiener(audio_data,mysize=17)
     
     output_path = pathlib.Path(output_dir,f"{audio_file_path.stem}_weiner.wav")
     sf.write(output_path, filtered_audio, sr, subtype='FLOAT')
@@ -128,8 +128,10 @@ def main():
         print(f"Error: The directory '{directory_path}' does not exist.")
         sys.exit(1)
 
-    if not os.path.exists(output_dir):
-        os.makedirs(output_dir)
+    if pathlib.Path(output_dir).exists():
+        shutil.rmtree(output_dir
+                      )
+    os.makedirs(output_dir)
 
     for filename in os.listdir(directory_path):
         input_audio_file_path = pathlib.Path(directory_path, filename)
@@ -143,7 +145,7 @@ def main():
                 denoised_by_rnnoise = rnnoised_amalgamated_denoising(binary_path,input_audio_file_path, output_dir)
                 denoised_by_weiner = weiner_filter_denoising(input_audio_file_path,output_dir)
 
-                fig, (source_axes,denoised_weiner_axes,denoised_rnnoise_axes) = plt.subplots(3, 1, figsize=(10, 10))
+                fig, (source_axes,denoised_weiner_axes,denoised_rnnoise_axes) = plt.subplots(3, 1, figsize=(12, 12))
 
                 plot_spectrogram(
                     input_audio_file_path,
@@ -156,14 +158,14 @@ def main():
                     denoised_by_weiner,
                     denoised_weiner_axes,
                     fig,
-                    f"Weiner filter:{input_audio_file_path.stem}",
+                    f"Adaptive Weiner filter:{input_audio_file_path.stem}",
                 )
                 
                 plot_spectrogram(
                     denoised_by_rnnoise,
                     denoised_rnnoise_axes,
                     fig,
-                    f"Denoised by amalgamated rnnoise {input_audio_file_path.stem}",
+                    f"Amalgamated RNNOISE neural network: {input_audio_file_path.stem}",
                 )
                 plt.tight_layout()
 
