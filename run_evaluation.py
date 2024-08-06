@@ -175,7 +175,7 @@ def main():
                 )
 
                 fig, (source_axes, denoised_weiner_axes, denoised_rnnoise_axes) = (
-                    plt.subplots(3, 1, figsize=(12, 12))
+                    plt.subplots(3, 1, figsize=(16, 12))
                 )
 
                 plot_spectrogram(
