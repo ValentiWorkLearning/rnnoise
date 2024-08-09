@@ -130,3 +130,18 @@ The library fork supports amalgamation of the sources for using them as a standa
 ```shell
 python3 header_only/amalgamate_me.py --heady-source=${PWD}/amalgamation/Heady --rnnoise-source=${PWD}
 ```
+
+## Code source tips
+If you forgot where the definitions of
+```c
+#define compute_activation_c rnn_compute_activation_c
+```
+are placed, just search for RTCD_ARCH macro definition. This will give a hint
+
+## Compilation with Vivado HLS
+For compiling the source code with high level synhtesis tools from Xilinx the folowing steps should be made:
+1) #undef __x86_64__
+2) #define MAX_INPUTS 2048
+3) #define MAX_OUTPUTS 8192
+4) #define RTCD_ARCH c
+5) #define LPCNET_TEST
