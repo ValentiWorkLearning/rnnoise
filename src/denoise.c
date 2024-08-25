@@ -30,7 +30,14 @@
 #include "config.h"
 #endif
 
-#include <stdlib.h>
+#ifdef USE_MIMALLOC_ALLOCATOR
+   #include <mimalloc.h>
+   #include <mimalloc-override.h>
+   #include <stdlib.h>
+#else
+   #include <stdlib.h>
+#endif
+
 #include <string.h>
 #include <stdio.h>
 #include "kiss_fft.h"
@@ -47,6 +54,8 @@
 #include <mimalloc.h>
 #include <mimalloc-override.h>  
 #endif
+
+#include <stdbool.h>
 
 #define SQUARE(x) ((x)*(x))
 
@@ -448,4 +457,29 @@ float rnnoise_process_frame(DenoiseState *st, float *out, const float *in) {
 void rnnoise_set_xcorr_kernel_cb(DenoiseState *st, xcorr_kernel_cb xcorr_callback)
 {
   st->xcorr_callback = xcorr_callback;
+}
+
+
+float rnnoise_process_frame_standalone(float *out, const float *in)
+{
+#pragma HLS INTERFACE s_axilite port=return bundle=CONTROL_BUS
+#pragma HLS INTERFACE m_axi port=in offset=slave bundle=INPUT
+#pragma HLS INTERFACE m_axi port=out offset=slave bundle=OUTPUT
+#define RNNOISE_PROCESSING_FRAMGE_SIZE 480
+
+  float in_data[RNNOISE_PROCESSING_FRAMGE_SIZE];
+	float out_data[RNNOISE_PROCESSING_FRAMGE_SIZE];
+
+  memcpy(in_data,in, RNNOISE_PROCESSING_FRAMGE_SIZE*sizeof(float));
+
+  static bool is_initialized = false;
+  static DenoiseState* denoise_state = NULL;
+  if(!is_initialized){
+    denoise_state = rnnoise_create(NULL);
+    is_initialized = true;
+  }
+  float vad_result = rnnoise_process_frame(denoise_state,out_data,in_data);
+
+  memcpy(out,out_data, RNNOISE_PROCESSING_FRAMGE_SIZE*sizeof(float));
+  return vad_result;
 }

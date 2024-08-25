@@ -29,7 +29,13 @@
 #endif
 
 #include <string.h>
-#include <stdlib.h>
+#ifdef USE_MIMALLOC_ALLOCATOR
+   #include <mimalloc.h>
+   #include <mimalloc-override.h>
+   #include <stdlib.h>
+#else
+   #include <stdlib.h>
+#endif
 #include "nnet.h"
 
 #define SPARSE_BLOCK_SIZE 32

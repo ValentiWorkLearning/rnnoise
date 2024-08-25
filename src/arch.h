@@ -34,6 +34,13 @@
 #ifndef ARCH_H
 #define ARCH_H
 
+#ifdef USE_MIMALLOC_ALLOCATOR
+   #include <mimalloc.h>
+   #include <mimalloc-override.h>  
+#else
+   #include <stdlib.h>
+#endif
+
 #include "opus_types.h"
 #include "common.h"
 

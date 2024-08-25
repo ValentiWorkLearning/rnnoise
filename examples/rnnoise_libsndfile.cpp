@@ -89,7 +89,7 @@ static void process_audio_recording(
     fmt::println(stdout,"Processing audio...");
     while (input_audio_file_handle.read (samples_buffer.data(), samples_buffer.size()) != 0) {
         normalize_to_rnnoise_expected_level(samples_buffer);
-        float vad_prob = rnnoise_process_frame(rnnoise_denoise_state_ptr, samples_buffer.data(), samples_buffer.data());
+        float vad_prob = rnnoise_process_frame_standalone(samples_buffer.data(), samples_buffer.data());
         dump_vad_prob(lazy_vad_probe_writer,vad_prob);
         denormalize_from_rnnoise_expected_level(samples_buffer);
         output_audio_file_handle.write(samples_buffer.data(),samples_buffer.size());

@@ -62,6 +62,16 @@ if(NOT EXISTS "${CMAKE_CURRENT_LIST_DIR}/src/rnnoise_data.c")
         file(COPY ${RNNOISE_MODEL_UNPACKED_SOURCE_DIR}/rnnoise_data.h DESTINATION ${RNNOIDE_MODEL_FILES_DESTINATION})
 endif()
 
+set(PYTHON_SCRIPT_ARGS "--heady-source=${CMAKE_CURRENT_LIST_DIR}/amalgamation/Heady" "--rnnoise-source=${CMAKE_CURRENT_LIST_DIR}")
+message(INFO "Processing with sources amalgamation")
+execute_process(
+    COMMAND ${CMAKE_COMMAND} -E env python3 ${CMAKE_CURRENT_LIST_DIR}/header_only/amalgamate_me.py ${PYTHON_SCRIPT_ARGS}
+        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+        RESULT_VARIABLE result
+        OUTPUT_VARIABLE output
+        ERROR_VARIABLE error
+)
+
 # Get source files
 
 set(RN_NOISE_SRC
@@ -97,6 +107,8 @@ set(RN_NOISE_SRC
 
 add_library(rnnoise STATIC ${RN_NOISE_SRC})
 
+add_library(rnnoise_amalgamated STATIC include/rnnoise.h header_only/rnnoise_amalgamated.c)
+
 add_definitions(-DRNNOISE_BUILD)
 
 # Include dirs
@@ -105,14 +117,20 @@ target_include_directories(rnnoise PUBLIC
         $<INSTALL_INTERFACE:include>
         PRIVATE src)
 
+target_include_directories(rnnoise_amalgamated PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+        $<INSTALL_INTERFACE:include>
+        PRIVATE src)
 
 if(NOT RNNOISE_BAREMETAL)
-        target_link_libraries(rnnoise PUBLIC mimalloc-static)
-        target_compile_definitions(rnnoise PUBLIC USE_MIMALLOC_ALLOCATOR)
+        #target_link_libraries(rnnoise PUBLIC mimalloc-static)
+        #target_compile_definitions(rnnoise PUBLIC USE_MIMALLOC_ALLOCATOR)
+        target_compile_definitions(rnnoise_amalgamated PUBLIC RTCD_ARCH=c)
 endif()
 
 if (UNIX)
         target_link_libraries(rnnoise PUBLIC m)
+        target_link_libraries(rnnoise_amalgamated PUBLIC m)
 endif(UNIX)
 
 if(RNNOISE_COMPILE_DEMO)
