@@ -9,6 +9,7 @@ import soundfile as sf
 import librosa
 import librosa.display
 import shutil
+import json
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -116,6 +117,13 @@ def rnnoised_amalgamated_denoising(
 #     scipy.io.wavfile.write(output_result, sr, y)
 
 
+def store_json_result(sigmos_result, audio_file_path:pathlib.Path, output_directory:pathlib.Path):
+    audio_filename = audio_file_path.stem
+    result_json_path = pathlib.Path(output_directory,f"{audio_filename}.json")
+    
+    with open(result_json_path, "w") as file:
+        json.dump(sigmos_result, file, indent=4)
+
 def main():
     parser = argparse.ArgumentParser(
         description="Launch rnnoise test app for processing"
@@ -175,7 +183,7 @@ def main():
                 )
 
                 fig, (source_axes, denoised_weiner_axes, denoised_rnnoise_axes) = (
-                    plt.subplots(3, 1, figsize=(16, 12))
+                    plt.subplots(3, 1, figsize=(12, 12))
                 )
 
                 plot_spectrogram(
@@ -216,6 +224,9 @@ def main():
                 rnnoise_denoising_result = sigmos_evaluator.evaluate_file(
                     denoised_by_rnnoise
                 )
+                store_json_result(input_file_result,input_audio_file_path,output_dir)
+                store_json_result(weiner_filter_result,denoised_by_weiner,output_dir)
+                store_json_result(rnnoise_denoising_result,denoised_by_rnnoise,output_dir)
 
                 plot_sigmos_results(
                     sigmos_items = [

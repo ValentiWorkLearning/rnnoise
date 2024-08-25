@@ -1,3 +1,6 @@
 [submodule "amalgamation/Heady"]
 	path = amalgamation/Heady
 	url = https://github.com/ValentiWorkLearning/Heady.git
+[submodule "pyagc"]
+	path = pyagc
+	url = https://github.com/jorgehatccrma/pyagc.git

@@ -101,13 +101,13 @@ class SigMOS:
         output = self.session.run(None, onnx_inputs)[0][0]
 
         result = {
-            "MOS_COL": float(output[0]),
-            "MOS_DISC": float(output[1]),
-            "MOS_LOUD": float(output[2]),
-            "MOS_NOISE": float(output[3]),
-            "MOS_REVERB": float(output[4]),
-            "MOS_SIG": float(output[5]),
-            "MOS_OVRL": float(output[6]),
+            "MOS_COL": round(float(output[0]),3),
+            "MOS_DISC": round(float(output[1]),3),
+            "MOS_LOUD": round(float(output[2]),3),
+            "MOS_NOISE": round(float(output[3]),3),
+            "MOS_REVERB": round(float(output[4]),3),
+            "MOS_SIG": round(float(output[5]),3),
+            "MOS_OVRL": round(float(output[6]),3),
         }
         return result
 
@@ -164,7 +164,7 @@ def plot_sigmos_results(
     sigmos_dataframe = pd.DataFrame(competitors)
     transposed_frame = sigmos_dataframe.T
 
-    bar_chart = transposed_frame.plot.bar(width=0.8, figsize=(16, 5))
+    bar_chart = transposed_frame.plot.bar(width=0.8, figsize=(12, 5))
     legends = [sigmos_item.audio_path.stem for sigmos_item in sigmos_items]
 
     bar_chart.legend(legends)
